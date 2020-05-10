@@ -15,8 +15,6 @@ import org.apache.hadoop.mapreduce.Partitioner;
 
 public class Lab1CountV1
 {
-
-	
 	public static class CountryPartitioner extends Partitioner <SimpleRecordWritable, IntWritable>
 	{
 		@Override
@@ -25,7 +23,6 @@ public class Lab1CountV1
 			return Math.abs(key.getPartitionCode() % numberOfPartitions);
 		}
 	}	
-	
     
 	public static class Lab1Mapper extends Mapper<Text, SimpleRecordWritable, SimpleRecordWritable, IntWritable>
 	{
