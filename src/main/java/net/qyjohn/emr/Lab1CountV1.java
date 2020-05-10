@@ -33,7 +33,7 @@ public class Lab1CountV1
 
 		public void map(Text key, SimpleRecordWritable value, Context context) throws IOException, InterruptedException
 		{
-			(if (value.year == 2015) || (value.year == 2016))
+			if ((value.year == 2015) || (value.year == 2016))
 			{
 				context.write(value, one);
 			}
