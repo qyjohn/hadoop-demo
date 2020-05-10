@@ -82,10 +82,13 @@ public class SimpleRecordInputFormat extends FileInputFormat<Text, SimpleRecordW
 				{
 		            String line = lineRecordReader.getCurrentValue().toString();
 					String fields[] = line.split("\t");
-					String day  = fields[1].trim();	 // The second column is expected to be the day
+					String dayField = fields[1].trim(); // The 2nd colume is the day
+					// convert from YYYYMMDD to YYYY-MM-DD
+					String day  = String.format("%s-%s-%s", dayField.substring(0,4), dayField.substring(4,6),dayField.substring(6,8));
 					int year = Integer.parseInt(fields[3].trim());	 // The 4th column is the year
 					String cnt  = fields[51].trim(); // The 52th column is expected to be the country code
-		
+
+					// Using the MD5 as the key for the mapper. This will not be used anyway.
 					MessageDigest md = MessageDigest.getInstance("MD5");
 					md.update(line.getBytes());
 					String digest = md.digest().toString();
