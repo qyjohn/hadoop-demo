@@ -12,9 +12,12 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.Partitioner;
+import org.apache.hadoop.util.GenericOptionsParser;
 
 public class Lab1CountV1
 {
+
+	
 	public static class CountryPartitioner extends Partitioner <SimpleRecordWritable, IntWritable>
 	{
 		@Override
@@ -23,6 +26,7 @@ public class Lab1CountV1
 			return Math.abs(key.getPartitionCode() % numberOfPartitions);
 		}
 	}	
+	
     
 	public static class Lab1Mapper extends Mapper<Text, SimpleRecordWritable, SimpleRecordWritable, IntWritable>
 	{
@@ -52,10 +56,14 @@ public class Lab1CountV1
 			context.write(key, result);
    		}
 	}
-
+	
 	public static void main(String[] args) throws Exception
 	{
+		
 		Configuration conf = new Configuration();
+		GenericOptionsParser optionParser = new GenericOptionsParser(conf, args);
+		String[] remainingArgs = optionParser.getRemainingArgs();
+    		
 		Job job = new Job(conf,"EMR Lab 1");
 		job.setJarByClass(Lab1CountV1.class);
 		job.setMapperClass(Lab1Mapper.class);
@@ -66,8 +74,8 @@ public class Lab1CountV1
 		job.setOutputValueClass(IntWritable.class);
         job.setInputFormatClass(SimpleRecordInputFormat.class);
         job.setOutputFormatClass(SimpleRecordOutputFormat.class);
-        FileInputFormat.addInputPath(job, new Path(args[0]));
-		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        FileInputFormat.addInputPath(job, new Path(remainingArgs[0]));
+		FileOutputFormat.setOutputPath(job, new Path(remainingArgs[1]));
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
 }
